@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy package &apos;com.AbcLoan.app.exceptionHandling&apos; to &apos;FinalLoanproject/src/main/java&apos;&#x0D;&#x0A;- Original project: &apos;FinalAceHomeLoanproject&apos;&#x0D;&#x0A;- Destination element: &apos;FinalLoanproject/src/main/java&apos;&#x0D;&#x0A;- Original element: &apos;FinalAceHomeLoanproject/src/main/java/com.AbcLoan.app.exceptionHandling&apos;" description="Copy package" destination="=FinalLoanproject/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/" element1="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.AbcLoan.app.exceptionHandling" flags="589830" fragments="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1660820323340" version="1.0"/>
+</session>
