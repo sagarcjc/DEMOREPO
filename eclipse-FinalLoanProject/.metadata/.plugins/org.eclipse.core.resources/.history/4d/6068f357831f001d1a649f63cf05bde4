@@ -1,0 +1,122 @@
+package com.AbcLoan.app.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.AbcLoan.app.exceptionHandling.CustomerNotFoundException;
+import com.AbcLoan.app.model.Enquiry;
+import com.AbcLoan.app.serviceI.EnquiryServiceI;
+
+@CrossOrigin("*")
+@RestController
+public class EnquiryController 
+{
+	@Autowired
+	EnquiryServiceI enquiryService;
+	
+	//http://localhost:8888/enquiry
+	@PostMapping(value="/enquiry")
+	public ResponseEntity<Enquiry> saveEnquiry(@RequestBody Enquiry enquiry)
+	{
+		
+		
+		if(enquiry.getAge()!=null & enquiry.getEmail()!=null)
+		{
+			Enquiry e = enquiryService.saveEnquiry(enquiry);
+			return new ResponseEntity<Enquiry> (e,HttpStatus.OK);
+		}
+		else
+		{
+			throw new CustomerNotFoundException ( "Equiry Details should not be null");
+		}
+		
+	
+	}
+	
+	
+	//http://localhost:8888/enquiry
+	@GetMapping(value="/enquiry")
+	public ResponseEntity<List<Enquiry>> getAllEnquiry()
+	{
+		List<Enquiry> listenquiry = enquiryService.getAllEnquiry();
+		
+		return new ResponseEntity<List<Enquiry>> (listenquiry,HttpStatus.OK);
+	}
+	
+	@PutMapping("/enquiry/{id}")
+	public ResponseEntity<Enquiry> updateEnquiry(@RequestBody Enquiry enquiry, @PathVariable Long id) 
+	{
+		
+		
+		if(enquiry.getEmail()!=null)
+		{
+			enquiry.setEnquiryId(id);
+			enquiryService.UpdateStatus(enquiry);
+			return new ResponseEntity<Enquiry>(enquiry,HttpStatus.OK);
+		}
+		else
+		{
+			throw new CustomerNotFoundException("Enquiry Not Updated");
+		}
+		}
+	
+
+	@PutMapping("/generate/{id}")
+	public Enquiry generateCibil(@PathVariable ("id") Long id, @RequestBody Enquiry oenquiry) {
+		oenquiry.setEnquiryId(id);
+		Enquiry oer=enquiryService.generateCibil(oenquiry);
+		return oer;
+	}
+	
+	@GetMapping("/oeEnquiry")
+	public List<Enquiry> getOperationEnquiry(){
+		List<Enquiry> elist= enquiryService.findByRemark("forwarded");
+		return elist;
+	}
+	
+	@PutMapping("/rejected/{id}")
+	public String rejectEnquiry( @PathVariable ("id") Long id, @RequestBody Enquiry rejectedEnquiry) {
+			
+		rejectedEnquiry.setEnquiryId(id);
+		enquiryService.rejectEnquiry(rejectedEnquiry);
+		
+		return"Enquiry rejected successfully";
+	}
+	@PutMapping("/approved/{id}")
+	public String  approvedEnquiry (@PathVariable ("id") Long id, @RequestBody Enquiry approvedEnquiry)
+	{
+		approvedEnquiry.setEnquiryId(id);
+		enquiryService.approveEnquiry(approvedEnquiry);
+		
+		return "enquiry approved !";
+	}
+	
+	@GetMapping("/enquiry/{enquiryId}")
+	public ResponseEntity<Enquiry> getSingleEnquiry (@PathVariable ("enquiryId") Long enquiryId)
+	{
+		
+		Enquiry e=this.enquiryService.getSingleEnquiry(enquiryId);
+		if(e!=null)
+		{
+			return new ResponseEntity<Enquiry> (e,HttpStatus.OK);
+		}
+		else
+		{
+		   throw new CustomerNotFoundException("Enquiry details not found");
+		}
+		
+	}
+	
+	
+
+}
